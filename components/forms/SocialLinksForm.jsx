@@ -1,25 +1,19 @@
 'use client';
 
-import { SocialLink } from '@/types/portfolio';
 import { FaPlus, FaTrash } from 'react-icons/fa';
-
-interface SocialLinksFormProps {
-  socialLinks: SocialLink[];
-  onChange: (links: SocialLink[]) => void;
-}
 
 const commonPlatforms = ['GitHub', 'LinkedIn', 'Twitter', 'Instagram', 'Facebook', 'Website', 'Portfolio'];
 
-export default function SocialLinksForm({ socialLinks, onChange }: SocialLinksFormProps) {
+export default function SocialLinksForm({ socialLinks, onChange }) {
   const addLink = () => {
     onChange([...socialLinks, { platform: '', url: '' }]);
   };
 
-  const removeLink = (index: number) => {
+  const removeLink = (index) => {
     onChange(socialLinks.filter((_, i) => i !== index));
   };
 
-  const updateLink = (index: number, field: keyof SocialLink, value: string) => {
+  const updateLink = (index, field, value) => {
     const updated = [...socialLinks];
     updated[index] = { ...updated[index], [field]: value };
     onChange(updated);

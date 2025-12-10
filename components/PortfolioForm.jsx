@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { Portfolio, PersonalInfo, SocialLink, Skill, Project, Experience, Education } from '@/types/portfolio';
 import PersonalInfoForm from './forms/PersonalInfoForm';
 import SocialLinksForm from './forms/SocialLinksForm';
 import SkillsForm from './forms/SkillsForm';
@@ -9,33 +7,28 @@ import ProjectsForm from './forms/ProjectsForm';
 import ExperienceForm from './forms/ExperienceForm';
 import EducationForm from './forms/EducationForm';
 
-interface PortfolioFormProps {
-  portfolio: Portfolio;
-  onChange: (portfolio: Portfolio) => void;
-}
-
-export default function PortfolioForm({ portfolio, onChange }: PortfolioFormProps) {
-  const updatePersonalInfo = (info: PersonalInfo) => {
+export default function PortfolioForm({ portfolio, onChange }) {
+  const updatePersonalInfo = (info) => {
     onChange({ ...portfolio, personalInfo: info });
   };
 
-  const updateSocialLinks = (links: SocialLink[]) => {
+  const updateSocialLinks = (links) => {
     onChange({ ...portfolio, socialLinks: links });
   };
 
-  const updateSkills = (skills: Skill[]) => {
+  const updateSkills = (skills) => {
     onChange({ ...portfolio, skills });
   };
 
-  const updateProjects = (projects: Project[]) => {
+  const updateProjects = (projects) => {
     onChange({ ...portfolio, projects });
   };
 
-  const updateExperience = (experience: Experience[]) => {
+  const updateExperience = (experience) => {
     onChange({ ...portfolio, experience });
   };
 
-  const updateEducation = (education: Education[]) => {
+  const updateEducation = (education) => {
     onChange({ ...portfolio, education });
   };
 

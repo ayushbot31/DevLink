@@ -1,25 +1,19 @@
 'use client';
 
-import { Skill } from '@/types/portfolio';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 
-interface SkillsFormProps {
-  skills: Skill[];
-  onChange: (skills: Skill[]) => void;
-}
+const skillLevels = ['beginner', 'intermediate', 'advanced', 'expert'];
 
-const skillLevels: Skill['level'][] = ['beginner', 'intermediate', 'advanced', 'expert'];
-
-export default function SkillsForm({ skills, onChange }: SkillsFormProps) {
+export default function SkillsForm({ skills, onChange }) {
   const addSkill = () => {
     onChange([...skills, { name: '', level: 'intermediate' }]);
   };
 
-  const removeSkill = (index: number) => {
+  const removeSkill = (index) => {
     onChange(skills.filter((_, i) => i !== index));
   };
 
-  const updateSkill = (index: number, field: keyof Skill, value: string | Skill['level']) => {
+  const updateSkill = (index, field, value) => {
     const updated = [...skills];
     updated[index] = { ...updated[index], [field]: value };
     onChange(updated);
@@ -59,7 +53,7 @@ export default function SkillsForm({ skills, onChange }: SkillsFormProps) {
               </label>
               <select
                 value={skill.level}
-                onChange={(e) => updateSkill(index, 'level', e.target.value as Skill['level'])}
+                onChange={(e) => updateSkill(index, 'level', e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
               >
                 {skillLevels.map((level) => (

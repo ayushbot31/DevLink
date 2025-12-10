@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import PortfolioForm from '@/components/PortfolioForm';
 import PortfolioPreview from '@/components/PortfolioPreview';
-import { Portfolio } from '@/types/portfolio';
 
-const defaultPortfolio: Portfolio = {
+const defaultPortfolio = {
   personalInfo: {
     name: '',
     title: '',
@@ -27,10 +26,10 @@ const defaultPortfolio: Portfolio = {
 };
 
 export default function Home() {
-  const [portfolio, setPortfolio] = useState<Portfolio>(defaultPortfolio);
+  const [portfolio, setPortfolio] = useState(defaultPortfolio);
   const [showPreview, setShowPreview] = useState(false);
 
-  const handlePortfolioChange = (updatedPortfolio: Portfolio) => {
+  const handlePortfolioChange = (updatedPortfolio) => {
     setPortfolio(updatedPortfolio);
   };
 

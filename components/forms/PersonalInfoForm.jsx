@@ -1,22 +1,16 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { PersonalInfo } from '@/types/portfolio';
 
-interface PersonalInfoFormProps {
-  personalInfo: PersonalInfo;
-  onChange: (info: PersonalInfo) => void;
-}
+export default function PersonalInfoForm({ personalInfo, onChange }) {
+  const fileInputRef = useRef(null);
+  const [uploadMethod, setUploadMethod] = useState('upload');
 
-export default function PersonalInfoForm({ personalInfo, onChange }: PersonalInfoFormProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadMethod, setUploadMethod] = useState<'upload' | 'url'>('upload');
-
-  const handleChange = (field: keyof PersonalInfo, value: string) => {
+  const handleChange = (field, value) => {
     onChange({ ...personalInfo, [field]: value });
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (event) => {
     const file = event.target.files?.[0];
     if (file) {
       // Validate file type
@@ -33,8 +27,7 @@ export default function PersonalInfoForm({ personalInfo, onChange }: PersonalInf
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        const result = reader.result as string;
-        handleChange('avatar', result);
+        handleChange('avatar', reader.result);
       };
       reader.readAsDataURL(file);
     }

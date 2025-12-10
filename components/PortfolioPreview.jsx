@@ -1,14 +1,9 @@
 'use client';
 
-import { Portfolio } from '@/types/portfolio';
 import { FaGithub, FaLinkedin, FaTwitter, FaGlobe, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
 
-interface PortfolioPreviewProps {
-  portfolio: Portfolio;
-}
-
-const getSocialIcon = (platform: string) => {
+const getSocialIcon = (platform) => {
   const lowerPlatform = platform.toLowerCase();
   if (lowerPlatform.includes('github')) return <FaGithub />;
   if (lowerPlatform.includes('linkedin')) return <FaLinkedin />;
@@ -18,7 +13,7 @@ const getSocialIcon = (platform: string) => {
   return <FaGlobe />;
 };
 
-export default function PortfolioPreview({ portfolio }: PortfolioPreviewProps) {
+export default function PortfolioPreview({ portfolio }) {
   const { personalInfo, socialLinks, skills, projects, experience, education } = portfolio;
 
   return (

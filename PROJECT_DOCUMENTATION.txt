@@ -1,0 +1,145 @@
+DEVLINK - PERSONAL PORTFOLIO WEBSITE GENERATOR
+COMPREHENSIVE CODE DOCUMENTATION (JAVASCRIPT)
+
+TABLE OF CONTENTS
+1. Project Overview
+2. Technologies Used & Their Role
+3. Data Structures (JavaScript)
+4. Code Architecture & File Structure
+5. Detailed Code Explanation by File
+6. Key Patterns & Algorithms
+7. State Management & Data Flow
+8. Component Communication
+9. Image Upload Implementation
+10. Rendering Logic
+
+1. PROJECT OVERVIEW
+DevLink is a Next.js 14 application built with React and plain JavaScript (no TypeScript). It uses the App Router and implements a client-side portfolio generator with real-time preview. State is handled with React hooks; the UI is made of small, focused components.
+
+2. TECHNOLOGIES USED & THEIR ROLE
+- Next.js 14: App Router, 'use client' for client components, automatic optimization
+- React 18.2: useState for state, useRef for DOM refs, component composition
+- Tailwind CSS 3.3: utility classes, responsive prefixes (md:, lg:), dark mode (dark:)
+- React Icons 4.11: icon components for social links/actions
+- PostCSS & Autoprefixer: Tailwind processing and vendor prefixing
+- ESLint (Next.js config): linting for code quality
+- jsconfig path alias: `@/*` → project root
+
+3. DATA STRUCTURES (JavaScript)
+Data is plain JavaScript objects/arrays stored in React state.
+- personalInfo: name/title/bio/email (required); phone/location/avatar optional (avatar can be URL or base64)
+- socialLinks: [{ platform, url }]
+- skills: [{ name, level }] where level ∈ ['beginner','intermediate','advanced','expert']
++- projects: [{ id, title, description, technologies[], imageUrl?, liveUrl?, githubUrl? }]
+- experience: [{ id, company, position, startDate, endDate?, current, description, location? }]
+- education: similar to experience with institution/degree/field/dates/description
+- theme: { primaryColor, secondaryColor } (optional)
+
+4. CODE ARCHITECTURE & FILE STRUCTURE
+Pattern: Component-based, unidirectional data flow.
+
+app/
+  layout.jsx        # Root layout, metadata, font loading
+  page.jsx          # Main page, state management, mode switching
+  globals.css       # Global styles, Tailwind imports
+components/
+  PortfolioForm.jsx     # Form container
+  PortfolioPreview.jsx  # Preview renderer
+  forms/
+    PersonalInfoForm.jsx
+    SocialLinksForm.jsx
+    SkillsForm.jsx
+    ProjectsForm.jsx
+    ExperienceForm.jsx
+    EducationForm.jsx
+Config:
+  jsconfig.json         # Path alias @/*
+  tailwind.config.js    # Tailwind (jsx globs)
+  postcss.config.js     # PostCSS/autoprefixer
+  next.config.js        # Next.js config
+Note: TypeScript artifacts removed (tsconfig.json, next-env.d.ts, types/).
+
+Data Flow:
+page.jsx (root state)
+  → PortfolioForm (passes sections)
+    → Individual Form Components (update callbacks)
+  → PortfolioPreview (receives complete portfolio)
+
+5. DETAILED CODE EXPLANATION BY FILE
+- app/layout.jsx: Imports Inter font, globals; exports metadata object; wraps children in html/body with font class.
+- app/page.jsx: Client component; holds `portfolio` and `showPreview`; toggles between form and preview; passes `handlePortfolioChange` to children.
+- components/PortfolioForm.jsx: Receives portfolio/onChange; section updaters use object spread for immutable updates; renders sub-forms with their data slice.
+- forms/PersonalInfoForm.jsx: Inputs for name/title/bio/email/phone/location; avatar upload (FileReader→base64) or URL; validates image type/size (≤5MB); previews base64/URL with onError hide.
+- forms/SocialLinksForm.jsx: Dynamic list; platform select + URL input; add/remove rows; emits updated array.
+- forms/SkillsForm.jsx: Dynamic skills; add/remove; level select (4 options); updates array immutably.
+- forms/ProjectsForm.jsx: Dynamic projects; title/description/tech tags/image/live/GitHub; tech tags add on Enter/remove; per-project upload method (upload/url); image validation like avatar; previews base64/URL.
+- forms/ExperienceForm.jsx: Dynamic experiences; current checkbox clears endDate; updates via map/filter.
+- forms/EducationForm.jsx: Similar to experience; institution/degree/field/dates/description; supports “Currently studying”.
+- components/PortfolioPreview.jsx: Renders sections only when data exists; `getSocialIcon` chooses icon; skills show progress width by level; projects show images (URL/base64) + links; experience/education format dates with toLocaleDateString and “Present”.
+
+6. KEY PATTERNS & ALGORITHMS
+1) Immutable updates with spread for objects/arrays
+2) Array helpers: add `[...arr, item]`, remove `filter`, update `map`
+3) Conditional rendering: ternary for view switch, logical AND to skip empty sections
+4) File upload: validate type/size → FileReader.readAsDataURL → store base64 → preview
+5) IDs: `Date.now().toString()` for new items
+
+7. STATE MANAGEMENT & DATA FLOW
+- Single source of truth in `app/page.jsx` (`portfolio` state)
+- Child forms get their slice + `onChange` callback
+- Children emit updates upward; parent replaces `portfolio`
+- Preview consumes full `portfolio` and re-renders immediately
+- Local UI state where needed (upload method toggles, per-project upload methods)
+
+8. COMPONENT COMMUNICATION
+- Parent → Child: props (`portfolio` slice, `onChange`)
+- Child → Parent: callback with updated data object/array
+- No sibling-to-sibling direct communication; everything flows through the parent
+
+9. IMAGE UPLOAD IMPLEMENTATION
+- Hidden file inputs referenced via `useRef`
+- Custom buttons trigger `.click()` on the input
+- Validation: `file.type.startsWith('image/')` and `file.size <= 5MB`
+- Conversion: FileReader → base64 data URL; stored directly in state
+- Display: `<img src={value} />` works for URLs and base64
+- Error handling: `onError` hides broken URL previews
+
+10. RENDERING LOGIC
+- Sections render only when their arrays have items
+- Lists use `.map()` with `key` props (id or index)
+- Dynamic classes via template literals; Tailwind handles responsive/dark styles
+- Progress bars map skill level to width (25/50/75/100%)
+- Dates formatted with `toLocaleDateString('en-US', { month: 'short', year: 'numeric' })` and “Present” for current roles
+
+CODE PATTERNS SUMMARY
+1. Immutable updates with spread
+2. Plain JS data shapes (objects/arrays)
+3. Controlled components (value + onChange)
+4. Callbacks from child to parent
+5. Conditional rendering (ternary / &&)
+6. Array methods: map/filter/find
+7. Optional chaining for safety
+8. Template literals for dynamic classes
+9. Computed properties for dynamic keys
+10. Early returns for validation paths
+
+KEY REACT CONCEPTS USED
+1. useState: Component state management
+2. useRef: DOM element references
+3. Props: Data passing between components
+4. Callbacks: Child-to-parent communication
+5. Conditional Rendering: Show/hide based on state
+6. List Rendering: map() for arrays
+7. Event Handlers: onClick, onChange, onKeyDown
+8. Controlled Inputs: value + onChange pattern
+9. Component Composition: Building complex UIs
+10. JavaScript + React Hooks (no TypeScript)
+
+CONCLUSION
+- Plain JavaScript (beginner-friendly) with React and Next.js App Router
+- Immutable state updates and controlled inputs
+- Component-based architecture and unidirectional data flow
+- Client-side file handling (base64 uploads) with validation
+- Responsive, dark-mode-ready UI via Tailwind
+- Clean organization with path aliases via jsconfig
+

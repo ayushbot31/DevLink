@@ -1,62 +1,56 @@
 'use client';
 
-import { Education } from '@/types/portfolio';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 
-interface EducationFormProps {
-  education: Education[];
-  onChange: (education: Education[]) => void;
-}
-
-export default function EducationForm({ education, onChange }: EducationFormProps) {
-  const addEducation = () => {
+export default function ExperienceForm({ experience, onChange }) {
+  const addExperience = () => {
     onChange([
-      ...education,
+      ...experience,
       {
         id: Date.now().toString(),
-        institution: '',
-        degree: '',
-        field: '',
+        company: '',
+        position: '',
         startDate: '',
         endDate: '',
         current: false,
         description: '',
+        location: '',
       },
     ]);
   };
 
-  const removeEducation = (id: string) => {
-    onChange(education.filter((e) => e.id !== id));
+  const removeExperience = (id) => {
+    onChange(experience.filter((e) => e.id !== id));
   };
 
-  const updateEducation = (id: string, field: keyof Education, value: any) => {
+  const updateExperience = (id, field, value) => {
     onChange(
-      education.map((e) => (e.id === id ? { ...e, [field]: value } : e))
+      experience.map((e) => (e.id === id ? { ...e, [field]: value } : e))
     );
   };
 
   return (
-    <div className="pb-6">
+    <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Education
+          Work Experience
         </h2>
         <button
-          onClick={addEducation}
+          onClick={addExperience}
           className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
         >
-          <FaPlus /> Add Education
+          <FaPlus /> Add Experience
         </button>
       </div>
       <div className="space-y-6">
-        {education.map((edu) => (
-          <div key={edu.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+        {experience.map((exp) => (
+          <div key={exp.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Education {education.indexOf(edu) + 1}
+                Experience {experience.indexOf(exp) + 1}
               </h3>
               <button
-                onClick={() => removeEducation(edu.id)}
+                onClick={() => removeExperience(exp.id)}
                 className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 <FaTrash />
@@ -65,38 +59,26 @@ export default function EducationForm({ education, onChange }: EducationFormProp
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Institution *
+                  Company *
                 </label>
                 <input
                   type="text"
-                  value={edu.institution}
-                  onChange={(e) => updateEducation(edu.id, 'institution', e.target.value)}
+                  value={exp.company}
+                  onChange={(e) => updateExperience(exp.id, 'company', e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="University Name"
+                  placeholder="Company Name"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Degree *
+                  Position *
                 </label>
                 <input
                   type="text"
-                  value={edu.degree}
-                  onChange={(e) => updateEducation(edu.id, 'degree', e.target.value)}
+                  value={exp.position}
+                  onChange={(e) => updateExperience(exp.id, 'position', e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Bachelor's, Master's, etc."
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Field of Study *
-                </label>
-                <input
-                  type="text"
-                  value={edu.field}
-                  onChange={(e) => updateEducation(edu.id, 'field', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Computer Science, Engineering, etc."
+                  placeholder="Job Title"
                 />
               </div>
               <div>
@@ -105,8 +87,8 @@ export default function EducationForm({ education, onChange }: EducationFormProp
                 </label>
                 <input
                   type="month"
-                  value={edu.startDate}
-                  onChange={(e) => updateEducation(edu.id, 'startDate', e.target.value)}
+                  value={exp.startDate}
+                  onChange={(e) => updateExperience(exp.id, 'startDate', e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                 />
               </div>
@@ -116,9 +98,9 @@ export default function EducationForm({ education, onChange }: EducationFormProp
                 </label>
                 <input
                   type="month"
-                  value={edu.endDate || ''}
-                  onChange={(e) => updateEducation(edu.id, 'endDate', e.target.value)}
-                  disabled={edu.current}
+                  value={exp.endDate || ''}
+                  onChange={(e) => updateExperience(exp.id, 'endDate', e.target.value)}
+                  disabled={exp.current}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white disabled:opacity-50"
                 />
               </div>
@@ -126,38 +108,50 @@ export default function EducationForm({ education, onChange }: EducationFormProp
                 <label className="flex items-center gap-2">
                   <input
                     type="checkbox"
-                    checked={edu.current}
+                    checked={exp.current}
                     onChange={(e) => {
-                      updateEducation(edu.id, 'current', e.target.checked);
+                      updateExperience(exp.id, 'current', e.target.checked);
                       if (e.target.checked) {
-                        updateEducation(edu.id, 'endDate', '');
+                        updateExperience(exp.id, 'endDate', '');
                       }
                     }}
                     className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
                   />
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Currently studying
+                    Currently working here
                   </span>
                 </label>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Location
+                </label>
+                <input
+                  type="text"
+                  value={exp.location || ''}
+                  onChange={(e) => updateExperience(exp.id, 'location', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  placeholder="City, Country"
+                />
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Description
                 </label>
                 <textarea
-                  value={edu.description || ''}
-                  onChange={(e) => updateEducation(edu.id, 'description', e.target.value)}
+                  value={exp.description}
+                  onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
                   rows={3}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Additional details about your education..."
+                  placeholder="Describe your role and achievements..."
                 />
               </div>
             </div>
           </div>
         ))}
-        {education.length === 0 && (
+        {experience.length === 0 && (
           <p className="text-gray-500 dark:text-gray-400 text-center py-4">
-            No education added yet. Click "Add Education" to get started.
+            No experience added yet. Click "Add Experience" to get started.
           </p>
         )}
       </div>

@@ -1,17 +1,11 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Project } from '@/types/portfolio';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 
-interface ProjectsFormProps {
-  projects: Project[];
-  onChange: (projects: Project[]) => void;
-}
-
-export default function ProjectsForm({ projects, onChange }: ProjectsFormProps) {
-  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
-  const [uploadMethods, setUploadMethods] = useState<{ [key: string]: 'upload' | 'url' }>({});
+export default function ProjectsForm({ projects, onChange }) {
+  const fileInputRefs = useRef({});
+  const [uploadMethods, setUploadMethods] = useState({});
   const addProject = () => {
     onChange([
       ...projects,
@@ -27,17 +21,17 @@ export default function ProjectsForm({ projects, onChange }: ProjectsFormProps) 
     ]);
   };
 
-  const removeProject = (id: string) => {
+  const removeProject = (id) => {
     onChange(projects.filter((p) => p.id !== id));
   };
 
-  const updateProject = (id: string, field: keyof Project, value: any) => {
+  const updateProject = (id, field, value) => {
     onChange(
       projects.map((p) => (p.id === id ? { ...p, [field]: value } : p))
     );
   };
 
-  const addTechnology = (projectId: string, tech: string) => {
+  const addTechnology = (projectId, tech) => {
     if (!tech.trim()) return;
     const project = projects.find((p) => p.id === projectId);
     if (project && !project.technologies.includes(tech.trim())) {
@@ -45,7 +39,7 @@ export default function ProjectsForm({ projects, onChange }: ProjectsFormProps) 
     }
   };
 
-  const removeTechnology = (projectId: string, tech: string) => {
+  const removeTechnology = (projectId, tech) => {
     const project = projects.find((p) => p.id === projectId);
     if (project) {
       updateProject(
@@ -56,7 +50,7 @@ export default function ProjectsForm({ projects, onChange }: ProjectsFormProps) 
     }
   };
 
-  const handleFileUpload = (projectId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (projectId, event) => {
     const file = event.target.files?.[0];
     if (file) {
       // Validate file type
@@ -73,18 +67,17 @@ export default function ProjectsForm({ projects, onChange }: ProjectsFormProps) 
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        const result = reader.result as string;
-        updateProject(projectId, 'imageUrl', result);
+        updateProject(projectId, 'imageUrl', reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const getUploadMethod = (projectId: string): 'upload' | 'url' => {
+  const getUploadMethod = (projectId) => {
     return uploadMethods[projectId] || 'upload';
   };
 
-  const setUploadMethod = (projectId: string, method: 'upload' | 'url') => {
+  const setUploadMethod = (projectId, method) => {
     setUploadMethods({ ...uploadMethods, [projectId]: method });
   };
 
